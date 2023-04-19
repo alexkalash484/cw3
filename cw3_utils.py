@@ -28,3 +28,22 @@ def card_amount_format(amount):
     if amount[0] == 'Счет':
         return f'{amount[0]} **{amount[-1][-4:]}'
     return f'{" ".join(amount[:-1])} {amount[-1][:4]} {amount[-1][4:6]}** **** {amount[-1][-4:]}'
+
+
+def data_output(item):
+    '''Функция вывода данных по операции'''
+
+    srt_date = item.get("date")
+    list_date = srt_date[:10].split('-')
+    item_date = '.'.join(reversed(list_date))
+
+    if item.get("from"):
+        source_trans = card_amount_format(item.get("from")) + ' ->'
+    else:
+        source_trans = ''
+
+    final_trans = card_amount_format(item.get("to"))
+
+    return f'{item_date} {item.get("description")}\n' \
+           f'{source_trans} {final_trans}\n' \
+           f'{item["operationAmount"]["amount"]} {item["operationAmount"]["currency"]["name"]}\n'
